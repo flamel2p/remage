@@ -1,6 +1,8 @@
-import { app, BrowserWindow, dialog, ipcMain, session } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, session, shell } from 'electron'
 import { join } from 'node:path'
+import { localLegalMetadata } from '../shared/app-metadata'
 import { PreferencesSchema, SubmitBatchRequestSchema, type Preferences } from '../shared/contracts'
+import { openSelectedOutputDirectory, registerOpenOutputDirectory } from './ipc/open-output-directory'
 import { RemageService } from './services/remage-service'
 
 let mainWindow: BrowserWindow | null = null
@@ -38,6 +40,10 @@ function assertTrustedSender(event: Electron.IpcMainInvokeEvent): void {
 }
 
 function installIpc(): void {
+  registerOpenOutputDirectory(ipcMain, {
+    assertTrustedSender,
+    openOutputDirectory: () => remage.openOutputDestination((path) => openSelectedOutputDirectory(path, (destination) => shell.openPath(destination)))
+  })
   ipcMain.handle('remage:choose-files', async (event) => {
     assertTrustedSender(event)
     const result = await dialog.showOpenDialog(mainWindow!, { properties: ['openFile', 'multiSelections'] })
@@ -90,7 +96,16 @@ function installIpc(): void {
   ipcMain.handle('remage:choose-output-directory', async (event) => {
     assertTrustedSender(event)
     const result = await dialog.showOpenDialog(mainWindow!, { properties: ['openDirectory', 'createDirectory'] })
+    return result.canceled ? null : remage.selectOutputDestination(result.filePaths[0])
+  })
+  ipcMain.handle('remage:choose-export-directory', async (event) => {
+    assertTrustedSender(event)
+    const result = await dialog.showOpenDialog(mainWindow!, { properties: ['openDirectory', 'createDirectory'] })
     return result.canceled ? null : remage.selectDestination(result.filePaths[0])
+  })
+  ipcMain.handle('remage:get-app-metadata', (event) => {
+    assertTrustedSender(event)
+    return { version: app.getVersion(), ...localLegalMetadata }
   })
   ipcMain.handle('remage:export-result', (event, resultId: unknown, destination: unknown) => {
     assertTrustedSender(event)
@@ -109,11 +124,12 @@ function installIpc(): void {
 async function bootstrap(): Promise<void> {
   await app.whenReady()
   session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false))
+  const scriptSrc = process.env.ELECTRON_RENDERER_URL ? "'self' 'unsafe-inline'" : "'self'"
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': ["default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'"]
+        'Content-Security-Policy': [`default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src ${scriptSrc}; connect-src 'self'; base-uri 'none'; form-action 'none'`]
       }
     })
   })

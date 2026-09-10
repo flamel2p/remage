@@ -73,6 +73,26 @@ describe('RemageService', () => {
     expect((await service.getPreferences()).settings.outputDirectory).toBeNull()
   })
 
+  it('opens only the currently selected output destination and rejects when none exists', async () => {
+    const directory = await temporaryDirectory()
+    const destination = join(directory, 'output')
+    await (await import('node:fs/promises')).mkdir(destination)
+    const service = new RemageService()
+    await service.initialize()
+
+    const unavailableOpen = vi.fn()
+    await expect(service.openOutputDestination(unavailableOpen)).rejects.toThrow('Choose a save destination in Settings first.')
+    expect(unavailableOpen).not.toHaveBeenCalled()
+
+    await service.selectOutputDestination(destination)
+    const open = vi.fn()
+    await service.openOutputDestination(open)
+    expect(open).toHaveBeenCalledWith(await (await import('node:fs/promises')).realpath(destination))
+
+    await rm(destination, { recursive: true })
+    await expect(service.openOutputDestination(open)).rejects.toThrow('Choose another folder in Settings.')
+  })
+
   it('turns corrupt inspection into one actionable error row', async () => {
     const directory = await temporaryDirectory()
     const corrupt = join(directory, 'corrupt.png')

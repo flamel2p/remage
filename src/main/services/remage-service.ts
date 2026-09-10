@@ -37,6 +37,7 @@ export class RemageService {
   private capabilities: Capability[] = []
   private queue: QueueItem[] = []
   private activeBatch: ActiveBatch | null = null
+  private selectedOutputDestinationId: string | null = null
   private preferenceState: Preferences = PreferencesSchema.parse({})
 
   async initialize(): Promise<void> {
@@ -164,6 +165,17 @@ export class RemageService {
     const id = randomUUID()
     this.destinationRecords.set(id, resolved)
     return id
+  }
+
+  async selectOutputDestination(folderPath: string): Promise<string> {
+    const id = await this.selectDestination(folderPath)
+    this.selectedOutputDestinationId = id
+    return id
+  }
+
+  async openOutputDestination(open: (path: string) => void | Promise<void>): Promise<void> {
+    if (!this.selectedOutputDestinationId) throw new Error('Choose a save destination in Settings first.')
+    await open(await this.resolveDestination(this.selectedOutputDestinationId))
   }
 
   async removeSource(sourceId: string): Promise<AppSnapshot> {
@@ -363,9 +375,14 @@ export class RemageService {
   private async resolveDestination(destinationId: string): Promise<string> {
     const path = this.destinationRecords.get(destinationId)
     if (!path) throw new Error('Choose an output folder again before exporting.')
-    const resolved = await realpath(path)
-    if (!(await stat(resolved)).isDirectory()) throw new Error('The selected output folder is no longer available.')
-    return resolved
+    try {
+      const resolved = await realpath(path)
+      if (!(await stat(resolved)).isDirectory()) throw new Error('The selected output folder is no longer available.')
+      return resolved
+    } catch (error) {
+      if (error instanceof Error && error.message === 'The selected output folder is no longer available.') throw error
+      throw new Error('The selected output folder is no longer available. Choose another folder in Settings.')
+    }
   }
 
   private replaceQueueItem(sourceId: string, next: QueueItem): void {

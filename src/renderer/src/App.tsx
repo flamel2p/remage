@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type DragEvent, type ReactElement } from 'react'
+import { useEffect, useMemo, useRef, useState, type DragEvent, type ReactElement } from 'react'
 import {
   defaultSettings,
   OperationSettingsSchema,
@@ -8,6 +8,7 @@ import {
   type QueueItem,
   type Result
 } from '../../shared/contracts'
+import type { AppMetadata } from '../../shared/app-metadata'
 import { formatBytes, formatDifference } from '../../shared/format'
 import { planResize } from '../../shared/resize'
 
@@ -31,6 +32,10 @@ export function App(): ReactElement {
   const [settings, setSettings] = useState<OperationSettings>(defaultSettings)
   const [notice, setNotice] = useState<string | null>(null)
   const [dragging, setDragging] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [appMetadata, setAppMetadata] = useState<AppMetadata | null>(null)
+  const settingsDialog = useRef<HTMLDialogElement>(null)
+  const settingsTrigger = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     let active = true
@@ -46,6 +51,20 @@ export function App(): ReactElement {
       if (active) setSnapshot(event.snapshot)
     })
   }, [])
+
+  useEffect(() => {
+    void window.remage.getAppMetadata().then(setAppMetadata).catch(showError)
+  }, [])
+
+  useEffect(() => {
+    const dialog = settingsDialog.current
+    if (!dialog) return
+    if (settingsOpen && !dialog.open) {
+      dialog.showModal()
+      requestAnimationFrame(() => dialog.querySelector<HTMLButtonElement>('[data-settings-close]')?.focus())
+    }
+    if (!settingsOpen && dialog.open) dialog.close()
+  }, [settingsOpen])
 
   const queue = snapshot.queue
   const readyItems = queue.filter((item) => item.status === 'ready')
@@ -129,6 +148,33 @@ export function App(): ReactElement {
     }
   }
 
+  function openSettings(): void {
+    setSettingsOpen(true)
+  }
+
+  function closeSettings(): void {
+    settingsDialog.current?.close()
+    setSettingsOpen(false)
+    requestAnimationFrame(() => settingsTrigger.current?.focus())
+  }
+
+  function handleSettingsClosed(): void {
+    setSettingsOpen(false)
+    requestAnimationFrame(() => settingsTrigger.current?.focus())
+  }
+
+  async function openOutputDirectory(): Promise<void> {
+    if (!settings.outputDirectory) {
+      setNotice('Choose a save destination in Settings first.')
+      return
+    }
+    try {
+      await window.remage.openOutputDirectory()
+    } catch (error) {
+      showError(error)
+    }
+  }
+
   async function run(): Promise<void> {
     if (!canSubmit) return
     try {
@@ -140,7 +186,7 @@ export function App(): ReactElement {
 
   async function exportResult(result: Result): Promise<void> {
     try {
-      const destination = await window.remage.chooseOutputDirectory()
+      const destination = await window.remage.chooseExportDirectory()
       if (!destination) return
       await window.remage.exportResult(result.id, destination)
     } catch (error) {
@@ -150,7 +196,7 @@ export function App(): ReactElement {
 
   async function exportAll(): Promise<void> {
     try {
-      const destination = await window.remage.chooseOutputDirectory()
+      const destination = await window.remage.chooseExportDirectory()
       if (!destination) return
       await window.remage.exportAll(snapshot.results.filter((result) => result.status === 'completed' || result.status === 'unchanged').map((result) => result.id), destination)
     } catch (error) {
@@ -171,11 +217,7 @@ export function App(): ReactElement {
           <div className="brand-mark" aria-hidden="true"><span /><span /><span /></div>
           <span>Remage</span>
         </div>
-        <div className="header-detail">Private, on-device image processing</div>
-      </header>
-
-      <section className="workspace" aria-label="Image workspace">
-        <div className="mode-switch" aria-label="Operation">
+        <div className="mode-switch" aria-label="Operation mode">
           <button
             type="button"
             aria-pressed={settings.mode === 'optimizer'}
@@ -193,7 +235,25 @@ export function App(): ReactElement {
             Converter
           </button>
         </div>
+        <div className="header-actions">
+          {!settings.outputDirectory && <span className="header-action-status" id="open-destination-guidance">Choose a destination in Settings</span>}
+          <button
+            type="button"
+            className="icon-button"
+            aria-label="Open save destination"
+            aria-describedby={!settings.outputDirectory ? 'open-destination-guidance' : undefined}
+            title={!settings.outputDirectory ? 'Choose a save destination in Settings first.' : 'Open save destination'}
+            onClick={() => void openOutputDirectory()}
+          >
+            <FolderIcon />
+          </button>
+          <button ref={settingsTrigger} type="button" className="icon-button" aria-label="Open Settings" onClick={openSettings}>
+            <SettingsIcon />
+          </button>
+        </div>
+      </header>
 
+      <section className="workspace" aria-label="Image workspace">
         <div
           className={`drop-zone ${dragging ? 'dragging' : ''}`}
           onDragEnter={(event) => { event.preventDefault(); setDragging(true) }}
@@ -299,16 +359,6 @@ export function App(): ReactElement {
             {resizePreview && <p className="help-text">First queued image will be {formatDimensions(resizePreview.width, resizePreview.height)}.</p>}
           </div>
 
-          <div className="setting-group destination-row">
-            <div>
-              <h2>Save destination</h2>
-              <p className="help-text">{settings.outputDirectory ? 'A destination folder is selected for automatic export in this session.' : 'Choose a folder to export completed files automatically.'}</p>
-            </div>
-            <button type="button" className="secondary-button" onClick={() => void chooseOutputDirectory()}>
-              {settings.outputDirectory ? 'Change folder' : 'Choose folder'}
-            </button>
-          </div>
-
           {jpegAcknowledgementRequired && (
             <label className="warning-callout">
               <input
@@ -365,7 +415,7 @@ export function App(): ReactElement {
 
       <footer className="action-bar">
         <div className="progress-copy" aria-live="polite">
-          {isRunning ? snapshot.progressLabel ?? 'Processing images…' : 'Files never leave your Mac'}
+          {isRunning ? snapshot.progressLabel ?? 'Processing images…' : <><span>Private, on-device image processing</span><span>Files never leave your Mac</span></>}
         </div>
         {isRunning ? (
           <button type="button" className="secondary-button" onClick={() => void window.remage.cancelBatch().catch(showError)}>Cancel batch</button>
@@ -373,6 +423,41 @@ export function App(): ReactElement {
           <button type="button" className="primary-button" disabled={!canSubmit} title={!canSubmit ? (resizeError ?? (eligibleReadyItems.length === 0 && readyItems.length > 0 ? 'Switch to Converter to process the remaining files.' : readyItems.length === 0 ? 'Add a valid image first.' : 'Complete the required output settings.')) : undefined} onClick={() => void run()}>{runLabel}</button>
         )}
       </footer>
+
+      <dialog
+        ref={settingsDialog}
+        className="settings-dialog"
+        aria-labelledby="settings-title"
+        onCancel={(event) => { event.preventDefault(); closeSettings() }}
+        onClose={handleSettingsClosed}
+      >
+        <div className="dialog-header">
+          <div>
+            <p className="dialog-eyebrow">Remage</p>
+            <h2 id="settings-title">Settings</h2>
+          </div>
+          <button type="button" className="icon-button" data-settings-close aria-label="Close Settings" onClick={closeSettings}><CloseIcon /></button>
+        </div>
+        <section className="dialog-section" aria-labelledby="save-destination-title">
+          <h3 id="save-destination-title">Save destination</h3>
+          <p>{settings.outputDirectory ? 'A destination folder is selected for automatic export in this session.' : 'Choose a folder to export completed files automatically.'}</p>
+          <button type="button" className="secondary-button" onClick={() => void chooseOutputDirectory()}>
+            {settings.outputDirectory ? 'Change folder' : 'Choose folder'}
+          </button>
+          <p className="dialog-note">The destination is kept only for this session.</p>
+        </section>
+        <section className="dialog-section" aria-labelledby="about-title">
+          <h3 id="about-title">About</h3>
+          {appMetadata ? (
+            <>
+              <p>Remage {appMetadata.version}</p>
+              <p>License: {appMetadata.license}</p>
+              <h4>Bundled third-party notices</h4>
+              <ul>{appMetadata.notices.map((notice) => <li key={notice}>{notice}</li>)}</ul>
+            </>
+          ) : <p>Loading local application information…</p>}
+        </section>
+      </dialog>
 
       {notice && <div className="notice" role="alert"><span>{notice}</span><button type="button" aria-label="Dismiss message" onClick={() => setNotice(null)}>×</button></div>}
     </main>
@@ -425,4 +510,16 @@ function queueStatus(status: QueueItem['status']): string {
 
 function resultStatus(status: Result['status']): string {
   return ({ completed: 'Completed', unchanged: 'No size reduction' })[status]
+}
+
+function FolderIcon(): ReactElement {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h6l1.8 2h9.2v9.8a2.2 2.2 0 0 1-2.2 2.2H5.7a2.2 2.2 0 0 1-2.2-2.2V6.5Z" /><path d="M3.5 8.5h17" /></svg>
+}
+
+function SettingsIcon(): ReactElement {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" /><path d="m19.1 13.5 1.4 1.1-2 3.4-1.7-.7a7.4 7.4 0 0 1-1.8 1l-.3 1.8h-4l-.3-1.8a7.4 7.4 0 0 1-1.8-1l-1.7.7-2-3.4 1.4-1.1a7.4 7.4 0 0 1 0-2.1L4.9 10l2-3.4 1.7.7a7.4 7.4 0 0 1 1.8-1l.3-1.8h4l.3 1.8a7.4 7.4 0 0 1 1.8 1l1.7-.7 2 3.4-1.4 1.1a7.4 7.4 0 0 1 0 2.1Z" /></svg>
+}
+
+function CloseIcon(): ReactElement {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
 }

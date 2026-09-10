@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import type { AppMetadata } from './app-metadata'
 
 export const ImageFormatSchema = z.enum(['png', 'jpeg', 'webp'])
 export type ImageFormat = z.infer<typeof ImageFormatSchema>
@@ -198,6 +199,9 @@ export interface RemageApi {
   submitBatch(request: SubmitBatchRequest): Promise<void>
   cancelBatch(): Promise<void>
   chooseOutputDirectory(): Promise<string | null>
+  chooseExportDirectory(): Promise<string | null>
+  openOutputDirectory(): Promise<void>
+  getAppMetadata(): Promise<AppMetadata>
   exportResult(resultId: string, destination: string): Promise<AppSnapshot>
   exportAll(resultIds: string[], destination: string): Promise<AppSnapshot>
   onEvent(listener: (event: RemageEvent) => void): () => void
