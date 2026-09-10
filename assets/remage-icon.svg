@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Remage">
+  <defs>
+    <linearGradient id="background" x1="128" y1="64" x2="896" y2="960" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7868ee"/>
+      <stop offset="1" stop-color="#4430a5"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="200" y1="170" x2="660" y2="730" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="232" fill="url(#background)"/>
+  <path d="M145 250c0-58 47-105 105-105h524c58 0 105 47 105 105v524c0 58-47 105-105 105H250c-58 0-105-47-105-105V250Z" fill="url(#shine)"/>
+  <path d="M270 677V494c0-28 23-51 51-51h53c28 0 51 23 51 51v183c0 28-23 51-51 51h-53c-28 0-51-23-51-51Zm165 0V346c0-28 23-51 51-51h53c28 0 51 23 51 51v331c0 28-23 51-51 51h-53c-28 0-51-23-51-51Zm165 0V225c0-28 23-51 51-51h53c28 0 51 23 51 51v452c0 28-23 51-51 51h-53c-28 0-51-23-51-51Z" fill="#fff"/>
+</svg>

@@ -1,0 +1,79 @@
+{
+  "name": "remage",
+  "version": "0.1.0",
+  "description": "A private, local image optimizer, resizer, and converter for macOS.",
+  "private": true,
+  "main": "./out/main/index.js",
+  "author": "Rarticle Software Sdn. Bhd.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "fetch:codecs": "node scripts/fetch-codecs.mjs",
+    "package:mac": "pnpm run fetch:codecs && pnpm run build && electron-builder --mac --arm64",
+    "package:mac:x64": "pnpm run fetch:codecs && pnpm run build && electron-builder --mac --x64"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.1.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sharp": "^0.35.4",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.47.0",
+    "@typescript-eslint/parser": "^8.47.0",
+    "electron": "^44.3.0",
+    "electron-builder": "^26.8.1",
+    "electron-vite": "^5.0.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.16"
+  },
+  "build": {
+    "appId": "com.rarticle.remage",
+    "productName": "Remage",
+    "icon": "assets/remage-icon.icns",
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/sharp/**",
+      "node_modules/@img/**",
+      "resources/codecs/**"
+    ],
+    "files": [
+      "out/**",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/codecs",
+        "to": "codecs",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "afterPack": "scripts/after-sign.cjs",
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ]
+    }
+  },
+  "packageManager": "pnpm@11.18.0"
+}

@@ -1,0 +1,11 @@
+allowBuilds:
+  electron-winstaller: false
+  esbuild: true
+minimumReleaseAgeExclude:
+  - electron@44.3.0
+supportedArchitectures:
+  os:
+    - darwin
+  cpu:
+    - arm64
+    - x64

@@ -1,2 +1,8 @@
 /converter.png
 /optimizer.png
+node_modules/
+out/
+dist/
+release/
+resources/codecs/*/
+resources/codecs/.fetch-state.json
