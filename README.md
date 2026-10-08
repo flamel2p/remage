@@ -51,6 +51,8 @@ The default package command creates an arm64 DMG. `pnpm run package:mac:x64` cre
 
 `src/renderer` contains the React UI and supplied local fonts. `src/preload` exposes the small typed bridge. `src/main` owns dialogs, sources, batch coordination, filesystem output, preferences, and codec invocation. `src/shared` contains schemas and pure sizing/format logic. See [docs/architecture.md](docs/architecture.md) for the boundaries and [NOTICE.md](NOTICE.md) for third-party notices.
 
+UI changes follow the root [design.md](design.md), its shared tokens and locally bundled Google Fonts. [REUI setup](docs/reui-setup.md) documents connected development tooling, the ignored `.env.local` license-key location, and the Motion Icon redistribution gate. These design assets prepare the [web/PWA-first execution plan](docs/platform-execution-plan.md); the current renderer's styling/component migration is still pending.
+
 ## Troubleshooting
 
 - If strict PNG/JPEG optimization is shown as unavailable, run `pnpm run fetch:codecs` again and verify that macOS can execute the local adapters.

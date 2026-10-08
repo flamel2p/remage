@@ -1,0 +1,172 @@
+/* Exact design values live here. Rules and component usage live in /design.md. */
+:root {
+  color-scheme: light dark;
+
+  /* Primitives */
+  --remage-white: #ffffff;
+  --remage-violet: #5b4bdb;
+  --remage-violet-hover: #4c3bc4;
+  --remage-violet-active: #4030ab;
+  --remage-violet-dark: #aa9cff;
+  --remage-violet-dark-hover: #c0b4ff;
+  --remage-violet-dark-active: #9585f2;
+  --remage-on-violet-dark: #17122b;
+  --remage-canvas-light: #f7f7fa;
+  --remage-canvas-dark: #111218;
+  --remage-surface-light: #ffffff;
+  --remage-surface-dark: #191b24;
+  --remage-elevated-light: #ffffff;
+  --remage-elevated-dark: #232633;
+  --remage-text-light: #20222d;
+  --remage-text-dark: #f2f3f7;
+  --remage-muted-text-light: #646778;
+  --remage-muted-text-dark: #b7b9c8;
+  --remage-muted-light: #eeedf3;
+  --remage-muted-dark: #232633;
+  --remage-border-light: #dfdee8;
+  --remage-border-dark: #353746;
+  --remage-input-border-light: #8c889a;
+  --remage-input-border-dark: #73788d;
+  --remage-selection-light: #f0edff;
+  --remage-selection-dark: #2b2547;
+  --remage-selection-text-light: #4030ab;
+  --remage-selection-text-dark: #c0b4ff;
+  --remage-success-light: #166534;
+  --remage-success-dark: #86efac;
+  --remage-success-soft-light: #f0fdf4;
+  --remage-success-soft-dark: #13271d;
+  --remage-warning-light: #854d0e;
+  --remage-warning-dark: #fcd34d;
+  --remage-warning-soft-light: #fffbeb;
+  --remage-warning-soft-dark: #2b2414;
+  --remage-error-light: #b91c1c;
+  --remage-error-dark: #fca5a5;
+  --remage-error-soft-light: #fef2f2;
+  --remage-error-soft-dark: #311a20;
+  --remage-info-light: #1d4ed8;
+  --remage-info-dark: #93c5fd;
+  --remage-info-soft-light: #eff6ff;
+  --remage-info-soft-dark: #172239;
+
+  --remage-font-ui: 'Atkinson Hyperlegible Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --remage-font-data: 'Lilex', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --font-sans: var(--remage-font-ui);
+  --font-mono: var(--remage-font-data);
+  --text-caption: 0.8125rem;
+  --text-small: 0.875rem;
+  --text-body: 1rem;
+  --text-large: 1.125rem;
+  --text-section: 1.25rem;
+  --text-title-mobile: 1.5rem;
+  --text-title: 1.75rem;
+  --leading-body: 1.5;
+  --leading-small: 1.45;
+  --leading-heading: 1.2;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --radius: 0.5rem;
+  --radius-control: 0.5rem;
+  --radius-panel: 0.75rem;
+  --radius-dialog: 1rem;
+  --radius-pill: 999px;
+  --duration-fast: 120ms;
+  --duration-normal: 180ms;
+  --duration-overlay: 220ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --focus-width: 3px;
+  --focus-offset: 3px;
+  --icon-small: 1rem;
+  --icon-default: 1.25rem;
+  --icon-large: 1.5rem;
+  --target-min: 2.75rem;
+  --workspace-max: 65rem;
+  --layer-content: 0;
+  --layer-sticky: 20;
+  --layer-overlay: 40;
+  --layer-dialog: 50;
+  --layer-notice: 60;
+  --layer-tooltip: 70;
+
+  /* Semantic aliases, including the REUI/shadcn token contract. */
+  --background: light-dark(var(--remage-canvas-light), var(--remage-canvas-dark));
+  --foreground: light-dark(var(--remage-text-light), var(--remage-text-dark));
+  --card: light-dark(var(--remage-surface-light), var(--remage-surface-dark));
+  --card-foreground: var(--foreground);
+  --popover: light-dark(var(--remage-elevated-light), var(--remage-elevated-dark));
+  --popover-foreground: var(--foreground);
+  --primary: light-dark(var(--remage-violet), var(--remage-violet-dark));
+  --primary-foreground: light-dark(var(--remage-white), var(--remage-on-violet-dark));
+  --primary-hover: light-dark(var(--remage-violet-hover), var(--remage-violet-dark-hover));
+  --primary-active: light-dark(var(--remage-violet-active), var(--remage-violet-dark-active));
+  --secondary: light-dark(var(--remage-muted-light), var(--remage-muted-dark));
+  --secondary-foreground: var(--foreground);
+  --muted: var(--secondary);
+  --muted-foreground: light-dark(var(--remage-muted-text-light), var(--remage-muted-text-dark));
+  --accent: light-dark(var(--remage-selection-light), var(--remage-selection-dark));
+  --accent-foreground: light-dark(var(--remage-selection-text-light), var(--remage-selection-text-dark));
+  --border: light-dark(var(--remage-border-light), var(--remage-border-dark));
+  --input: light-dark(var(--remage-input-border-light), var(--remage-input-border-dark));
+  --ring: var(--primary);
+  --destructive: light-dark(var(--remage-error-light), var(--remage-error-dark));
+  --destructive-foreground: light-dark(var(--remage-white), var(--remage-error-soft-dark));
+  --success: light-dark(var(--remage-success-light), var(--remage-success-dark));
+  --success-foreground: light-dark(var(--remage-white), var(--remage-success-soft-dark));
+  --warning: light-dark(var(--remage-warning-light), var(--remage-warning-dark));
+  --warning-foreground: light-dark(var(--remage-white), var(--remage-warning-soft-dark));
+  --info: light-dark(var(--remage-info-light), var(--remage-info-dark));
+  --info-foreground: light-dark(var(--remage-white), var(--remage-info-soft-dark));
+  --invert: var(--foreground);
+  --invert-foreground: var(--background);
+  --success-soft: light-dark(var(--remage-success-soft-light), var(--remage-success-soft-dark));
+  --warning-soft: light-dark(var(--remage-warning-soft-light), var(--remage-warning-soft-dark));
+  --error-soft: light-dark(var(--remage-error-soft-light), var(--remage-error-soft-dark));
+  --info-soft: light-dark(var(--remage-info-soft-light), var(--remage-info-soft-dark));
+  --shadow-panel: 0 1px 2px light-dark(rgb(32 34 45 / 5%), rgb(0 0 0 / 20%));
+  --shadow-overlay: 0 16px 48px light-dark(rgb(32 34 45 / 18%), rgb(0 0 0 / 45%));
+  --scrim: light-dark(rgb(17 18 24 / 40%), rgb(0 0 0 / 60%));
+
+  /* Component aliases */
+  --button-height: var(--target-min);
+  --button-radius: var(--radius-control);
+  --button-padding-x: var(--space-4);
+  --button-primary-bg: var(--primary);
+  --button-primary-fg: var(--primary-foreground);
+  --field-height: var(--target-min);
+  --field-bg: var(--card);
+  --field-border: var(--input);
+  --panel-padding: var(--space-6);
+  --panel-bg: var(--card);
+  --panel-border: var(--border);
+  --row-padding-y: var(--space-3);
+  --row-gap: var(--space-3);
+}
+
+:root.light,
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root.dark,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-overlay: 0ms;
+  }
+}

@@ -1,5 +1,12 @@
 schema: spec-driven
 
+context: |
+  Remage is a local-only React/TypeScript image workspace with separate browser and native adapters.
+  For UI/visual work, read root design.md and its linked token/font assets; it owns design rules.
+  OpenSpec owns behavior, platform capabilities and release gates. Follow docs/reui-setup.md for
+  REUI source/credential intake and the written public-source redistribution gate for Motion Icons.
+  Keep implementation and runtime verification distinct from planning and developer-tool readiness.
+
 # Project context (optional)
 # This is shown to AI when creating artifacts.
 # Add your tech stack, conventions, style guides, domain knowledge, etc.

@@ -7,6 +7,8 @@ orchestrator explicitly delegates a bounded task and synthesizes its evidence.
 ## Operating rules
 
 - Read the active OpenSpec change and affected source before proposing or editing work.
+- For UI, typography, theme, icons or visual assets, read [design.md](design.md) first; it owns design rules and links the canonical tokens and fonts. OpenSpec owns behavior. Review every changed surface against its design gate.
+- For REUI discovery, source adoption or credentials, read [docs/reui-setup.md](docs/reui-setup.md); keep premium source outside public intake until the recorded redistribution-rights gate passes.
 - Use OpenSpec for non-trivial features, cross-cutting changes, and changes that alter user-facing behaviour: explore, propose, apply, then verify and archive.
 - Keep one implementation owner at a time for overlapping files or contracts.
 - Requirements, design decisions, architecture decisions, test evidence, and documentation must name their source and distinguish plans from implemented behaviour.

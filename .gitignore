@@ -4,3 +4,7 @@ dist/
 release/
 resources/codecs/*/
 resources/codecs/.fetch-state.json
+.env
+.env.*
+!.env.example
+!.env.local.example

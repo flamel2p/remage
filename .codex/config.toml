@@ -1,0 +1,9 @@
+# Project-scoped REUI tooling; authentication uses Codex's OAuth credential store.
+# This is the documented explicit form of https://mcp.reui.io and matches the
+# existing global registration, allowing its credentials to be reused.
+[mcp_servers.reui]
+url = "https://mcp.reui.io/api/mcp"
+enabled = true
+http_headers = { "X-Reui-Style" = "radix-nova" }
+startup_timeout_sec = 30
+tool_timeout_sec = 60
