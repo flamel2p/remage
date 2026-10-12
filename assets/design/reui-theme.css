@@ -31,6 +31,10 @@
   --color-warning-foreground: var(--warning-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-success-soft: var(--success-soft);
+  --color-warning-soft: var(--warning-soft);
+  --color-error-soft: var(--error-soft);
+  --color-info-soft: var(--info-soft);
   --color-invert: var(--invert);
   --color-invert-foreground: var(--invert-foreground);
   --radius-sm: calc(var(--radius) - 2px);

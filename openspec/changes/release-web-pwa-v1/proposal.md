@@ -32,5 +32,5 @@ None. Existing desktop workspace, native lossless optimization, transformation, 
 - Proposed additions: browser entry/build configuration, browser platform adapter, file/blob registry, worker protocol, WASM codec adapters, download/ZIP publisher, and PWA manifest/service worker.
 - Build/test boundaries must prevent Electron, Node filesystem APIs, and Sharp from entering the web bundle; the existing macOS build must remain functional.
 - New dependencies are evaluated/pinned browser codecs, ZIP support, and PWA build tooling with retained notices. No paid processing vendor or backend is required.
-- Shared UI adoption adds reviewed/pinned Tailwind v4, shadcn/Radix and selected REUI source dependencies. Fonts and developer MCP setup are prepared, but production renderer migration is pending; premium icon access does not prove redistribution rights.
+- Shared UI adoption adds reviewed/pinned Tailwind v4, shadcn/Radix and selected REUI source dependencies. Implementation began on 2026-10-12; current shared renderer migration and validation are recorded in `docs/web-verification.md`. Premium icon access does not prove redistribution rights.
 - The detailed execution order, proposed limits, use-case pros/cons, release gates, and source references are in `docs/platform-execution-plan.md`. These artifacts are plans, not implementation evidence.

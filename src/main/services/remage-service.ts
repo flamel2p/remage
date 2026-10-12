@@ -66,6 +66,7 @@ export class RemageService {
         status: result.status,
         exportStatus: result.exportStatus,
         exportPath: null,
+        ...(result.exportReceipt ? { exportReceipt: result.exportReceipt } : {}),
         settings: { ...result.settings, outputDirectory: null },
         createdAt: result.createdAt
       })),
@@ -252,13 +253,15 @@ export class RemageService {
   async exportResult(resultId: string, destination: string): Promise<AppSnapshot> {
     const result = this.results.get(resultId)
     if (!result) throw new Error('This result is no longer available.')
-    this.results.set(resultId, { ...result, exportStatus: 'exporting' })
+    const { exportReceipt: _previousReceipt, ...unpublished } = result
+    void _previousReceipt
+    this.results.set(resultId, { ...unpublished, exportStatus: 'exporting', exportPath: null })
     this.emit()
     try {
       const exportPath = await this.publisher.publish({ sourcePath: result.sourcePath, candidatePath: result.candidatePath, result, destination: await this.resolveDestination(destination) })
-      this.results.set(resultId, { ...result, exportStatus: 'exported', exportPath })
+      this.results.set(resultId, { ...unpublished, exportStatus: 'exported', exportPath, exportReceipt: { kind: 'native-published', destinationId: destination } })
     } catch (error) {
-      this.results.set(resultId, { ...result, exportStatus: 'error', exportPath: null })
+      this.results.set(resultId, { ...unpublished, exportStatus: 'error', exportPath: null })
       this.emit()
       throw error
     }
@@ -353,7 +356,7 @@ export class RemageService {
             result,
             destination: await this.resolveDestination(settings.outputDirectory)
           })
-          this.results.set(result.id, { ...result, exportStatus: 'exported', exportPath })
+          this.results.set(result.id, { ...result, exportStatus: 'exported', exportPath, exportReceipt: { kind: 'native-published', destinationId: settings.outputDirectory } })
         } catch {
           this.results.set(result.id, { ...result, exportStatus: 'error', exportPath: null })
         }

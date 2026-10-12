@@ -1,10 +1,12 @@
 # Remage product requirements
 
-Version: 1.0 draft · 2026-09-09
+Historical desktop draft: 2026-09-09. Web/PWA release scope reconciled 2026-10-12.
 
 ## 1. Document status and authority
 
-This is the complete proposed V1 product contract. Requirements describe intended behavior, not implemented features. Ekko confirmed a macOS-first desktop release on 2026-09-09, with Windows/Linux versions required in the future. The code architecture therefore preserves cross-platform boundaries, while this V1 change produces and verifies macOS only.
+The remaining sections preserve the original macOS-first desktop contract and its historical requirements; they do not override the subsequently approved browser edition. The public version 1.0 direction is now web/PWA first, with desktop expansion after WEB-STABLE. The active [web change](../openspec/changes/release-web-pwa-v1/proposal.md), [web release contract](web-release-contract.md), and [platform execution plan](platform-execution-plan.md) own that release boundary. Root [design.md](../design.md) owns shared visual rules. Actual implementation/evidence belongs in [web verification](web-verification.md).
+
+Browser differences are explicit: strict optimization is conditional rather than mandatory; no native destination/folder publication or automatic export; downloads/ZIP have observable receipts; budgets require independent browser/device measurement; PWA application-asset updates require safe activation; current local icons remain while Motion Icon redistribution rights are pending. The original supplied fonts now have fresh locally bundled WOFF2 files and OFL provenance. The historical optional lossy-optimizer proposal remains excluded. Existing native fidelity/export guarantees stay intact.
 
 Sources, in priority order:
 

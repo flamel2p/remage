@@ -1,6 +1,6 @@
 # REUI tooling, adoption and credential maintenance
 
-Maintained 2026-10-08. [design.md](../design.md) owns visual decisions. This guide distinguishes connected development tooling from future renderer/component implementation.
+Maintained 2026-10-12. [design.md](../design.md) owns visual decisions. This guide distinguishes connected development tooling, adopted source and remaining runtime qualification.
 
 ## Current readiness
 
@@ -8,14 +8,14 @@ Maintained 2026-10-08. [design.md](../design.md) owns visual decisions. This gui
 | --- | --- |
 | Project registration | [.codex/config.toml](../.codex/config.toml) declares Streamable HTTP REUI, timeouts and the non-secret `X-Reui-Style: radix-nova` header |
 | Endpoint | `https://mcp.reui.io/api/mcp`, the documented explicit form of `https://mcp.reui.io`; matches the existing global registration without changing it |
-| Authentication | `codex mcp login reui` completed successfully through browser OAuth on 2026-10-08; no bearer or Authorization secret is committed |
+| Authentication | Browser OAuth succeeded on 2026-10-08 and the in-session context call still succeeds on 2026-10-12. Both configured credentials separately passed isolated MCP authentication/context checks; no credential literal is committed |
 | In-session discovery | REUI tools became callable in this session; `get_project_context`, `get_agent_skill`, catalog search and icon metadata discovery succeeded |
-| Account entitlement | Live context reported Ultimate; this establishes catalog access, not public redistribution rights |
-| Style routing | `radix-nova` header is configured; initial live discovery preceded this header and used default Base docs. Reload/reconnect and confirm `get_project_context.projectStyle.current` before component adoption |
-| Local agent skill | Live `get_agent_skill` workflow version `e7aac3424a` was read; no vendor installer was run and no competing local rule source was created |
-| UI framework/source | Existing React 19 renderer still uses custom CSS. Tailwind v4/shadcn initialization, REUI source adoption and token/font migration are pending in the web execution change |
+| Account entitlement | Current OAuth context and both isolated credential context calls reported Ultimate; this establishes MCP catalog access, not public redistribution rights or a premium registry download check |
+| Style routing | CLI configuration and isolated header requests confirm Radix. The reused connector still reports Base; adopted free sources used explicit radix-nova registry URLs plus documented Radix APIs, with this routing difference recorded. Reconnect/recheck before future style-dependent discovery |
+| Local agent skill | Live `get_agent_skill` workflow version `68f0e6fa91` was read on 2026-10-12; root design.md overrides conflicting generic typography/density/motion defaults. No vendor installer was run and no competing local rule source was created |
+| UI framework/source | Shared React 19 renderer uses pinned Tailwind v4, reviewed free REUI/shadcn Radix-nova source, canonical local fonts/tokens and responsive capability-driven UI. [Provenance](ui-component-provenance.md) and [verification](web-verification.md) record adoption and runtime limits |
 | Motion Icons | Ekko chose outline Motion Icons after written public-source redistribution permission. Permission has not been supplied; no premium source/assets were installed |
-| Credentials | Ignored root `.env.local` exists with blank optional entries. No license key or personal token was supplied, printed or embedded |
+| Credentials | Both root `.env.local` entries are nonempty and separately authenticated on 2026-10-12. The file remains Git-ignored with mode 0600; neither value was printed or embedded. They are not loaded into this process environment; interactive MCP continues to use OAuth |
 
 The CLI's `Auth: Unknown` display is not a connection verdict. The OAuth success and actual read-only MCP responses are the authentication/connectivity evidence. None establishes product UI, accessibility, processing or offline qualification.
 
@@ -97,6 +97,8 @@ codex mcp login reui
 Then call live `get_project_context`, `get_agent_skill` and one specific free catalog lookup. Verify API/style/plan fields, rather than relying only on registration. Do not install a component to test connectivity. Keep prompts generic; do not send user images, private source names or native paths to the registry.
 
 On 2026-10-08, the initial broad local-picker search returned a weak Data Grid match; it was not adopted. The targeted File Upload lookup is a tooling/API check, not an upload feature or production integration. Icon metadata discovery succeeded, but no premium source was fetched or imported.
+
+On 2026-10-12, each configured credential was independently used as a Bearer credential in isolated JSON-RPC `initialize` and `get_project_context` requests to the registered endpoint. All four requests returned HTTP 200 with successful results; both context calls reported Ultimate and `radix-nova`/Radix. Only credential names, statuses, plan and style were emitted. No premium registry item was fetched and no account/auth configuration was changed. See the [dated verification follow-up](uiux-foundation-verification.md#credential-follow-up-2026-10-12).
 
 ## Official references
 

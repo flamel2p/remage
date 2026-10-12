@@ -1,7 +1,9 @@
 import { contextBridge, ipcRenderer, webUtils } from 'electron'
 import type { Preferences, RemageApi, SubmitBatchRequest } from '../shared/contracts'
+import { desktopPlatform } from '../shared/platform'
 
 const api: RemageApi = {
+  platform: desktopPlatform,
   chooseFiles: () => ipcRenderer.invoke('remage:choose-files'),
   chooseFolder: () => ipcRenderer.invoke('remage:choose-folder'),
   addDroppedFiles: (files) => ipcRenderer.invoke('remage:add-dropped-files', files.map((file) => webUtils.getPathForFile(file)).filter(Boolean)),

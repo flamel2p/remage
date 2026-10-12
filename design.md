@@ -1,6 +1,6 @@
 # Remage UI/UX source of truth
 
-Adopted direction: 2026-10-08. Applies to shared web, PWA and later desktop UI. This document defines the visual and interaction rules; it does not claim the current renderer has implemented them.
+Adopted direction: 2026-10-08. Applies to shared web, PWA and later desktop UI. Shared renderer migration implemented 2026-10-12; [verification](docs/web-verification.md) separates observed runtime checks from remaining release qualification. This document owns rules, not release certification.
 
 ## Authority and maintenance
 
@@ -110,9 +110,11 @@ Ekko selected REUI Motion Icons once written public-source redistribution permis
 6. Check real processing/download/publication semantics and local-only asset/data behavior; verify any REUI source/dependency/license intake separately.
 7. Report commands, screen/viewport/action, observed result, remaining limitations and artifact identity. A token/specimen pass does not establish product accessibility or release readiness.
 
-## Current implementation gaps
+## Implementation and remaining qualification
 
-The inspected renderer still uses Lilex for headings/brand/status, scattered literal colors, 12px secondary text and an 800px body minimum. It has no token-based dark mode or Tailwind/shadcn foundation. These are migration tasks in the web change, not completed by publishing these rules. New downloaded fonts and tokens are not yet imported into the production renderer.
+The shared renderer now imports the canonical local Google Fonts, tokens and complete REUI theme mapping, with pinned Tailwind v4, reviewed free Radix-nova primitives and capability-driven browser/native controls. Atkinson owns UI text; Lilex owns numeric data. Both themes, responsive rows, measured fixed chrome and Radix dialogs have local runtime evidence. Reviewed source adaptations and exact dependency versions are in [UI provenance](docs/ui-component-provenance.md).
+
+Manual screen-reader behavior, actual retail-browser 200% page zoom, the full device/browser matrix, physical touch/installed-PWA surfaces and complete release qualification remain open. Local SVG icons remain the explicitly deferred icon scope until written Motion Icon redistribution rights are recorded. Do not infer WEB-STABLE from renderer migration or screenshots.
 
 ## Decision sources
 

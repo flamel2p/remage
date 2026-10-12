@@ -32,3 +32,21 @@ git check-ignore .env.local
 Additional read-only Python checks validated font decoding/metadata/hashes, local links, CSS references, TOML, file permissions, task identifiers and numerical contrast. The temporary Brotli validation dependency was installed outside the repository; no application dependency changed.
 
 No premium REUI icon/component source was fetched or installed. Written Motion Icon redistribution permission remains pending. No renderer code, package manifest or lockfile changed in this foundation slice. Product tests/builds, Tailwind compilation, screen/keyboard/accessibility checks and PWA/offline qualification were not run; their implementation and evidence remain in the [web tasks](../openspec/changes/release-web-pwa-v1/tasks.md).
+
+## Credential follow-up: 2026-10-12
+
+Following Ekko's confirmation that both credentials were configured:
+
+- Both `.env.local` entries are nonempty; the file remains Git-ignored and mode 0600, with no frontend-prefixed credential entries.
+- Each credential independently passed isolated Bearer-authenticated MCP `initialize` and `get_project_context` requests: HTTP 200 and successful JSON-RPC results. Both context calls reported Ultimate and `radix-nova`/Radix when the configured style header was sent. Only credential names and allowlisted status/plan/style fields were printed.
+- The existing in-session OAuth connector still succeeds, but reports Base routing. `codex mcp get reui --json` confirms that the project header is configured. Reconnect and verify the connector's resolved style before adopting components.
+- Credentials are not present in this process environment; this check did not switch Codex from OAuth to token mode. The optional token remains available for deliberate headless use as documented in the setup guide.
+- No premium registry download, source installation, redistribution-permission verification or product tests were performed. The original font/contrast/OpenSpec checks above were not repeated in this follow-up; document whitespace and local links were checked.
+
+Authentication checks follow the [official REUI MCP smoke-test protocol](https://reui.io/docs/mcp) and [documented Bearer credential options](https://reui.io/docs/codex). Authentication and account entitlement do not establish premium registry source access or the recorded public-source rights gate.
+
+## Renderer follow-up: 2026-10-12
+
+The separate `release-web-pwa-v1` implementation now imports the canonical font/token assets into the shared renderer, with reviewed free REUI/shadcn Radix-nova source and pinned dependencies. Both typechecks, lint, 99 tests and native/web builds passed. Actual App Chromium processing/download/dialog/theme/responsive checks and independent isolated native strict-processing/publication/800px regression passed. [Web verification](web-verification.md) records exact commands, artifact identities, screenshots and limits; [source provenance](ui-component-provenance.md) records deliberate design/processing adaptations.
+
+This follow-up does not retroactively change the original foundation-only evidence. Motion Icons remain deferred without written public-source rights. Manual screen-reader speech, actual 200% retail page zoom, full device/PWA/production qualification and WEB-STABLE remain open.

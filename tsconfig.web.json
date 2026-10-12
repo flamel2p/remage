@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "paths": { "@/*": ["./src/renderer/src/*"] },
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "types": ["vite/client"]
+  },
+  "include": ["src/web", "src/renderer/src/App.tsx", "src/shared"],
+  "exclude": ["**/*.test.ts"]
+}

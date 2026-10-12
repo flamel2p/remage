@@ -1,0 +1,27 @@
+name: Reproducible bug
+description: Report processing, export, UI or offline behavior without uploading private images.
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and build
+      description: App build/version, browser version, OS/device, browser or installed PWA, and online/offline state.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps, expected behavior and actual behavior
+      description: Include settings, metadata policy, dimensions, file sizes, queue size and the exact visible error. Replace identifying filenames.
+    validations:
+      required: true
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Reproduction fixture
+      description: Prefer a fixture from test-fixtures/images or a synthetic image with the same properties. Share an image only when you have permission and have removed private content/metadata.
+  - type: textarea
+    id: recovery
+    attributes:
+      label: Recovery and relevant evidence
+      description: Does retry, a smaller selection or online reopening help? Include relevant console output after removing private content and credentials. For offline/update issues, include cached build IDs and whether other Remage windows were open.

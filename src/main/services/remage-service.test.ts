@@ -60,9 +60,31 @@ describe('RemageService', () => {
     await writeFile(source, 'a changed source must not be exported')
     await service.exportResult(result.id, destinationId)
     expect(service.snapshot().results[0].exportStatus).toBe('exported')
+    expect(service.snapshot().results[0]).toMatchObject({ exportPath: null, exportReceipt: { kind: 'native-published', destinationId } })
     expect(JSON.stringify(service.snapshot())).not.toContain(destination)
     const [exported] = await readdir(destination)
     expect((await (await import('node:fs/promises')).readFile(join(destination, exported))).subarray(0, 8)).toEqual(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
+    const pendingReceipts: unknown[] = []
+    const stop = service.subscribe((event) => { if (event.snapshot.results[0]?.exportStatus === 'exporting') pendingReceipts.push(event.snapshot.results[0].exportReceipt) })
+    await expect(service.exportResult(result.id, 'invalid-destination')).rejects.toThrow()
+    expect(pendingReceipts).toEqual([undefined])
+    expect(service.snapshot().results[0]).toMatchObject({ exportStatus: 'error', exportPath: null })
+    expect(service.snapshot().results[0].exportReceipt).toBeUndefined()
+    stop()
+    await service.dispose()
+  })
+
+  it('reports automatic native publication only after the output exists and keeps its destination opaque', async () => {
+    const directory = await temporaryDirectory(), source = join(directory, 'source.png'), destination = join(directory, 'automatic')
+    const fs = await import('node:fs/promises'); await fs.mkdir(destination)
+    await sharp({ create: { width: 20, height: 12, channels: 3, background: '#335577' } }).png().toFile(source)
+    const service = new RemageService(); await service.initialize(); const destinationId = await service.selectDestination(destination)
+    await service.addPaths([source]); const sourceId = service.snapshot().queue[0].id
+    await service.submit({ sourceIds: [sourceId], settings: { ...defaultSettings, mode: 'converter', outputFormat: 'webp', outputDirectory: destinationId } })
+    await waitForIdle(service)
+    expect(service.snapshot().results[0]).toMatchObject({ exportStatus: 'exported', exportPath: null, settings: { outputDirectory: null }, exportReceipt: { kind: 'native-published', destinationId } })
+    const [name] = await fs.readdir(destination); expect((await sharp(join(destination, name)).metadata()).format).toBe('webp')
+    expect(JSON.stringify(service.snapshot())).not.toContain(destination)
     await service.dispose()
   })
 

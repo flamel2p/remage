@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import type { AppMetadata } from './app-metadata'
+import type { PlatformCapabilities } from './platform'
 
 export const ImageFormatSchema = z.enum(['png', 'jpeg', 'webp'])
 export type ImageFormat = z.infer<typeof ImageFormatSchema>
@@ -20,8 +21,15 @@ export const ItemStatusSchema = z.enum([
 ])
 export type ItemStatus = z.infer<typeof ItemStatusSchema>
 
-export const ExportStatusSchema = z.enum(['not-exported', 'exporting', 'exported', 'error'])
+export const ExportStatusSchema = z.enum(['not-exported', 'exporting', 'exported', 'download-requested', 'archive-ready', 'error'])
 export type ExportStatus = z.infer<typeof ExportStatusSchema>
+
+export const ExportReceiptSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('native-published'), destinationId: z.string() }),
+  z.object({ kind: z.literal('download-requested'), suggestedName: z.string() }),
+  z.object({ kind: z.literal('archive-ready'), entries: z.number().int().nonnegative(), excluded: z.number().int().nonnegative() })
+])
+export type ExportReceipt = z.infer<typeof ExportReceiptSchema>
 
 export const ResizeSettingsSchema = z.object({
   enabled: z.boolean().default(false),
@@ -118,6 +126,7 @@ export const ResultSchema = z.object({
   status: z.enum(['completed', 'unchanged']),
   exportStatus: ExportStatusSchema,
   exportPath: z.string().nullable(),
+  exportReceipt: ExportReceiptSchema.optional(),
   settings: OperationSettingsSchema,
   createdAt: z.string().datetime()
 })
@@ -138,7 +147,9 @@ export const AppSnapshotSchema = z.object({
   capabilities: z.array(CapabilitySchema),
   activeBatchId: z.string().uuid().nullable(),
   activeMode: ModeSchema,
-  progressLabel: z.string().nullable()
+  progressLabel: z.string().nullable(),
+  intakeFeedback: z.object({ excluded: z.number().int().nonnegative(), label: z.string() }).optional(),
+  exportProgress: z.object({ status: z.enum(['waiting', 'preparing', 'ready', 'error']), label: z.string(), excluded: z.number().int().nonnegative() }).optional()
 })
 export type AppSnapshot = z.infer<typeof AppSnapshotSchema>
 
@@ -149,6 +160,7 @@ export const SubmitBatchRequestSchema = z.object({
 export type SubmitBatchRequest = z.infer<typeof SubmitBatchRequestSchema>
 
 export const PreferencesSchema = z.object({
+  appearance: z.enum(['system', 'light', 'dark']).optional(),
   mode: ModeSchema.default('optimizer'),
   settings: OperationSettingsSchema.default({
     mode: 'optimizer',
@@ -187,6 +199,7 @@ export const defaultSettings: OperationSettings = {
 export type RemageEvent = { type: 'snapshot'; snapshot: AppSnapshot }
 
 export interface RemageApi {
+  readonly platform: PlatformCapabilities
   chooseFiles(): Promise<AppSnapshot>
   chooseFolder(): Promise<AppSnapshot>
   addDroppedFiles(files: File[]): Promise<AppSnapshot>
@@ -205,4 +218,9 @@ export interface RemageApi {
   exportResult(resultId: string, destination: string): Promise<AppSnapshot>
   exportAll(resultIds: string[], destination: string): Promise<AppSnapshot>
   onEvent(listener: (event: RemageEvent) => void): () => void
+  cancelExport?(): Promise<void>
+  downloadArchive?(): Promise<AppSnapshot>
+  setUpdateLocked?(locked: boolean): void
+  hasSessionWork?(): boolean
+  dispose?(): void
 }

@@ -1,6 +1,6 @@
 # Remage web/PWA v1.0 and desktop execution plan
 
-Planning date: 2026-10-08, Asia/Kuching. Status: proposed execution plan; product implementation has not started for either new change. Shared design/font assets and developer REUI MCP setup are prepared separately in [design.md](../design.md) and [the tooling guide](reui-setup.md). Resource budgets and qualification thresholds below are proposed defaults, not measured capabilities or user-confirmed numeric limits.
+Planning date: 2026-10-08, Asia/Kuching. Execution started 2026-10-12 for `release-web-pwa-v1`; desktop expansion remains deferred. This document preserves the proposed delivery sequence and resource targets. Current implementation, selected codec, enforced provisional limits and actual validation are recorded in [web verification](web-verification.md), [the browser release contract](web-release-contract.md) and the active [tasks](../openspec/changes/release-web-pwa-v1/tasks.md). Shared UI authority and REUI tooling are in [design.md](../design.md) and [the tooling guide](reui-setup.md). Proposed budgets below are not weakest-device measurements or release qualification.
 
 ## 1. Direction and authority
 
