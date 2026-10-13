@@ -27,7 +27,7 @@ Status: **NOT RUN**. Replace placeholders with observed evidence; use `pass`, `f
 | W-01 Nine format pairs / rejection / unavailable codec | not run | |
 | W-02 Orientation / alpha / hidden RGB / metadata / JPEG loss and background | not run | |
 | W-03 Intake and planned-output / combined-resource boundaries | not run | |
-| W-04 Genuine processing and ZIP cancellation / timeout / retry / cleanup | not run | |
+| W-04 Genuine processing and ZIP cancellation / timeout / retry / cleanup / actual navigation and background return | not run | |
 | W-05 Captured settings / original requeue | not run | |
 | W-06 Mixed counts / byte totals / signed growth | not run | |
 | W-07 Individual downloads / ZIP CRC and extracted hashes / names / recovery | not run | |
@@ -36,6 +36,21 @@ Status: **NOT RUN**. Replace placeholders with observed evidence; use `pass`, `f
 | W-10 Active and suspended second clients / failed update / rollback | not run | |
 | W-11 Themes / contrast / fonts / keyboard / speech / genuine 200% zoom / touch | not run | |
 | W-12 Exact served artifact / support and measured limits / source and release materials | not run | |
+
+## Actual navigation and background return
+
+Use real browser navigation/Back and tab/application/device backgrounding. Record the event inspection method and any BFCache exclusion reason; synthetic events do not qualify these cases. Keep genuine BFCache restoration separate from a fresh document/session and ordinary-tab observations separate from installed or physical-device runs.
+
+| Case / actual surface | Observed events / `persisted` / duration | Retained results and ZIP / verified bytes | Active-work cancellation or background outcome / retry / session-loss guidance | Status / evidence |
+| --- | --- | --- | --- | --- |
+| Leave-page warning: Stay | | | | not run |
+| Navigate away / Back with completed result and prepared ZIP | | | | not run |
+| Navigate away / Back during genuine image or partial ZIP work | | | | not run |
+| Non-persisted navigation or observed reload/eviction | | | | not run |
+| Switch tab/application and return | | | | not run |
+| Physical phone background/lock and return | | | | not run |
+
+ZIP retention applies to a ZIP still ready at suspension. Starting replacement preparation invalidates the previous ZIP; interrupted construction must retain individual results and permit re-preparation. Cancelled preview work can leave source rows ready. Do not count a job that completed before navigation as active-work cancellation. Unknown `persisted` values do not prove BFCache use. Continued background completion is an observation, not a supported guarantee.
 
 ## Timings and memory
 
