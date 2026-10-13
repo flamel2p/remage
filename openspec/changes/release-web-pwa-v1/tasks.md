@@ -28,7 +28,7 @@
 ## 5. Worker jobs and transformation execution
 
 - [x] 5.1 Implement a typed versioned Worker job protocol with immutable submitted settings, one active image job, job/batch identity, and transfer ownership that preserves retained originals/results.
-- [x] 5.2 Implement the verified conversion/resize adapters and output validation, including EXIF-normalized dimension planning, pre-allocation planned-output/working-set admission, JPEG acknowledgement/background, and larger-output accounting; verify small-source oversized-enlargement rejection.
+- [x] 5.2 Implement the verified conversion/resize adapters and output validation, including EXIF-normalized dimension planning, pre-allocation planned-output/working-set admission, JPEG acknowledgement/background, and larger-output accounting; verify small-source oversized-enlargement rejection and real-codec source/output processing at the inclusive 12 MP ceiling.
 - [x] 5.3 Implement strict optimization only for the supported proven subset with full validation/no-larger unchanged behavior and non-exportable invalid candidates.
 - [x] 5.4 Implement queued/active cancellation, stale-message rejection, bounded execution, Worker reset, and failure/retry while retaining completed results.
 - [x] 5.5 Verify actual mixed-batch accounting, settings isolation, source requeue, timeout recovery, and repeated resource teardown with observable behavior tests.

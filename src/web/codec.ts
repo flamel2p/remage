@@ -18,7 +18,8 @@ export function constrainCodec(): void {
   ResourceLimits.maxProfileSize = 64n * 1024n
   ResourceLimits.width = BigInt(browserLimits.dimension)
   ResourceLimits.height = BigInt(browserLimits.dimension)
-  ResourceLimits.area = BigInt(browserLimits.pixels)
+  // ImageMagick's area resource threshold is exclusive; admission is inclusive.
+  ResourceLimits.area = BigInt(browserLimits.pixels) + 1n
   ResourceLimits.listLength = 4n
   ResourceLimits.time = BigInt(Math.ceil(browserLimits.imageTimeoutMs / 1000))
 }

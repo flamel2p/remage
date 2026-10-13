@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "scope": "Public synthetic GIO certificate-test fixtures already present in exact official GLib source; not user/account credentials.",
+  "reference": "https://github.com/ImageMagick/glib/blob/ea0118ca0d408473d320b21262a1cdc6ce3e5f40/gio/tests/tls-certificate.c",
+  "fixtures": [
+    {
+      "source": "glib",
+      "commit": "ea0118ca0d408473d320b21262a1cdc6ce3e5f40",
+      "path": "gio/tests/cert-tests/cert-key.pem",
+      "bytes": 1888,
+      "sha256": "e65a426d8868481c429376b7434f99bb673260122d7302cbbc36fc0c1fda21b7"
+    },
+    {
+      "source": "glib",
+      "commit": "ea0118ca0d408473d320b21262a1cdc6ce3e5f40",
+      "path": "gio/tests/cert-tests/cert-list.pem",
+      "bytes": 3952,
+      "sha256": "0a6a8587e85ef06f9075e5ccba70d724ba6e6a290e778e48dc7d56c5ec344fa0"
+    },
+    {
+      "source": "glib",
+      "commit": "ea0118ca0d408473d320b21262a1cdc6ce3e5f40",
+      "path": "gio/tests/cert-tests/key-cert.pem",
+      "bytes": 1888,
+      "sha256": "d4261b9a24bcd291a14d3bbfd213491650003fcae9547451d3360faacbb41493"
+    },
+    {
+      "source": "glib",
+      "commit": "ea0118ca0d408473d320b21262a1cdc6ce3e5f40",
+      "path": "gio/tests/cert-tests/key-crlf.pem",
+      "bytes": 887,
+      "sha256": "69816cf4fcb080608a9cda235800e98757624dfb5ea20c7fea1809ba6ecc1aed"
+    },
+    {
+      "source": "glib",
+      "commit": "ea0118ca0d408473d320b21262a1cdc6ce3e5f40",
+      "path": "gio/tests/cert-tests/key.pem",
+      "bytes": 887,
+      "sha256": "69816cf4fcb080608a9cda235800e98757624dfb5ea20c7fea1809ba6ecc1aed"
+    },
+    {
+      "source": "glib",
+      "commit": "ea0118ca0d408473d320b21262a1cdc6ce3e5f40",
+      "path": "gio/tests/cert-tests/key8.pem",
+      "bytes": 916,
+      "sha256": "376fb54dc9f81ed6ee1cb5ffdbdb0e0af86126b3d4a97a82098e1940ee3e0d07"
+    },
+    {
+      "source": "glib",
+      "commit": "ea0118ca0d408473d320b21262a1cdc6ce3e5f40",
+      "path": "gio/tests/cert-tests/key_missing-footer.pem",
+      "bytes": 857,
+      "sha256": "685c207635f62d0458a41c64f2912bf77eb62898d61678b3a01273b110d89740"
+    }
+  ]
+}

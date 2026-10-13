@@ -11,3 +11,11 @@ Before any public binary release:
 5. Record retrieval hashes, rebuild/replacement observations, published locations, exact web build identity and reviewer in the release evidence. Keep this gate open if any input or replacement step is unverified.
 
 Local development and automated candidate tests do not satisfy public conveyance evidence. An MIT Remage repository does not relicense the combined WASM, fonts or copied component source. Motion Icon permission is a separate gate and does not cover this binary.
+
+## Local preparation implemented
+
+The isolated [codec source tools](../tools/codec-source/lock.json) now seal and verify 28 exact upstream source archives and retain original licenses, selected upstream build scripts, the allowlisted Remage application source and explicit rebuild/replacement instructions. See [codec-source-rebuild.md](codec-source-rebuild.md) for commands and [codec-source-evidence.md](codec-source-evidence.md) for measured outcomes. Archives and build work stay under ignored `release/codec-source/`; the packet is private preparation only.
+
+The baseline source rebuild and marked libheif rebuild/relink both completed successfully. Their modules passed 36 actual-adapter fixture cases across the original and corrected application snapshots; the separate original-module loading proof adds nine cases. These are Node observations using the installed published wrapper's embedded glue, with generated glue retained as build material. The rebuilt bytes differ from the published module, so original-binary build attestation is not established.
+
+The pinned ImageMagick/Dependencies scripts have no identified standalone redistribution grant. Public packet mode explicitly refuses while this and the artifact-specific review/publication gates remain unresolved. Task 10.5 remains open.

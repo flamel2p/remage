@@ -135,6 +135,16 @@ describe('real browser codec candidate against independent native Sharp', () => 
     expect(transformImage(source, settings('png'), 0).bytes.length).toBeGreaterThan(source.length)
     expect(() => transformImage(source, { ...defaultSettings }, 0)).toThrow(/Strict browser optimization/)
   })
+
+  it('processes admitted exact 12 MP source and output boundaries with the real codec', async () => {
+    for (const [sourceWidth, sourceHeight, width, height] of [[4000, 3000, 2000, 1500], [2000, 1500, 4000, 3000]]) {
+      const source = new Uint8Array(await sharp({ create: { width: sourceWidth, height: sourceHeight, channels: 3, background: '#336699' } }).png().toBuffer())
+      const result = transformImage(source, settings('png', { preserveMetadata: false, resize: { enabled: true, width, height, lockAspectRatio: true, allowEnlargement: true } }), source.length)
+      const actual = await sharp(result.bytes).raw().toBuffer({ resolveWithObject: true })
+      expect([result.width, result.height, actual.info.width, actual.info.height, actual.info.channels]).toEqual([width, height, width, height, 3])
+      expect(actual.data.equals(Buffer.alloc(width * height * 3, Buffer.from([0x33, 0x66, 0x99])))).toBe(true)
+    }
+  }, 15_000)
 })
 
 describe('bounded content headers and explicit sanitization', () => {
